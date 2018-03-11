@@ -7,6 +7,12 @@ Courtesy of http://flask.pocoo.org/snippets/64/
 from flask_wtf import Form
 from wtforms.fields import StringField, PasswordField
 from wtforms.validators import DataRequired
+import requests
+
+from pytwisHandler import PytwisConst # Should come from pytwis
+from pytwisHandler import PytwisHandler
+
+pytwisHandler = PytwisHandler('http://127.0.0.1:4000/pytwis')
 
 class SignInForm(Form):
     username = StringField('Username', validators=[DataRequired()])
@@ -22,7 +28,13 @@ class SignInForm(Form):
         '''
         # TODO: Check the login credentials (username, password) match 
         # the record in the backend database.
-        if self.username.data == 'renwei' and self.password.data == '111111':
+
+        # url = 'http://127.0.0.1:4000/pytwis?cmd=login&username=' + self.username.data + '&password=' + self.password.data
+        status, response = pytwisHandler.sendRequest({PytwisConst.CMD:PytwisConst.CMD_LOGIN,
+                                                      PytwisConst.USERNAME: self.username.data,
+                                                      PytwisConst.PASSWORD: self.password.data})
+
+        if status == 200:
             return True
         else:
             return False
