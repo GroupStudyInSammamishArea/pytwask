@@ -5,31 +5,42 @@ import urllib
 ## Copy PytwisConst from pytwis
 ## Need to make this a package
 class PytwisConst:
-    # Commands
-    CMD_REGISTER = 'register'
-    CMD_LOGIN = 'login'
-    CMD_LOGOUT = 'logout'
-    CMD_CHANGE_PASSWORD = 'changepassword'
-    CMD_POST = 'post'
-    CMD_FOLLOW = 'follow'
-    CMD_UNFOLLOW = 'unfollow'
-    CMD_FOLLOWERS = 'followers'
-    CMD_FOLLOWINGS = 'followings'
-    CMD_TIMELINE = 'timeline'
-
-    # others
     AUTH = 'auth'
+    CHANGE_PASSWORD = 'changepassword'
     CONFIRM_PASSWORD = 'new_confirmed_password'
     CMD = 'cmd'
     ERROR = 'error'
+    FOLLOW = 'follow'
     FOLLOWEE = 'followee'
+    FOLLOWERS = 'followers'
+    FOLLOWER_LIST = 'follower_list'
+    FOLLOWINGS = 'followings'
+    FOLLOWING_LIST = 'following_list'
+    LOGIN = 'login'
+    LOGOUT = 'logout'
     MAX_TWEET_CNT = 'max_tweet_cnt'
     NEW_PASSWORD = 'new_password'
     OLD_PASSWORD = 'old_password'
     PASSWORD = 'password'
+    POST = 'post'
+    REGISTER = 'register'
+    TIMELINE = 'timeline'
     TWEET = 'tweet'
     TWEETS = 'tweets'
-    USERNAME = 'username'
+    UNFOLLOW = 'unfollow'
+    USER_NAME = 'username'
+
+    # Commands
+    CMD_REGISTER = REGISTER
+    CMD_LOGIN = LOGIN
+    CMD_LOGOUT = LOGOUT
+    CMD_CHANGE_PASSWORD = CHANGE_PASSWORD
+    CMD_POST = POST
+    CMD_FOLLOW = FOLLOW
+    CMD_UNFOLLOW = UNFOLLOW
+    CMD_FOLLOWERS = FOLLOWERS
+    CMD_FOLLOWINGS = FOLLOWINGS
+    CMD_TIMELINE = TIMELINE
 
 class Singleton(type):
     """
@@ -69,8 +80,8 @@ class PytwisHandler(metaclass=Singleton):
             if(PytwisConst.AUTH in dicResponse):
                 self.secreteKey = dicResponse[PytwisConst.AUTH] # Update auth secret key
 
-            if (PytwisConst.USERNAME in dicResponse):
-                self.userName = dicResponse[PytwisConst.USERNAME] # update a user name
+            if (PytwisConst.USER_NAME in dicResponse):
+                self.userName = dicResponse[PytwisConst.USER_NAME] # update a user name
 
             return response.status_code, dicResponse
         else:

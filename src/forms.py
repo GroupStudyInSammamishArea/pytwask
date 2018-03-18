@@ -31,7 +31,7 @@ class SignInForm(Form):
 
         # url = 'http://127.0.0.1:4000/pytwis?cmd=login&username=' + self.username.data + '&password=' + self.password.data
         status, response = pytwisHandler.sendRequest({PytwisConst.CMD:PytwisConst.CMD_LOGIN,
-                                                      PytwisConst.USERNAME: self.username.data,
+                                                      PytwisConst.USER_NAME: self.username.data,
                                                       PytwisConst.PASSWORD: self.password.data})
 
         if status == 200:
