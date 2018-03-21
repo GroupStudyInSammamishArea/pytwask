@@ -6,7 +6,6 @@ import datetime, time
 from flask import Flask, flash, redirect, render_template, url_for
 
 from forms import PostTweetForm, SignInForm
-from audioop import reverse
 
 from pytwisHandler import PytwisHandler
 from pytwisHandler import PytwisConst # Should come from pytwis

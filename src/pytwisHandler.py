@@ -1,6 +1,7 @@
 import json
 import requests
 import urllib
+from flask import session
 
 ## Copy PytwisConst from pytwis
 ## Need to make this a package
@@ -58,19 +59,17 @@ class Singleton(type):
         return cls._instance
 
 class PytwisHandler(metaclass=Singleton):
-    baseUrl = ''
-    secreteKey = ''
-    userName = ''
+    middleLayerBaseUrl = ''
 
-    def __init__(self, baseUrl):
-        self.baseUrl = baseUrl # 'http://127.0.0.1:4000/
+    def __init__(self, middleLayerBaseUrl):
+        self.middleLayerBaseUrl = middleLayerBaseUrl
 
     def sendRequest(self, params):
-        if not self.secreteKey:
-            url = self.baseUrl + '?' + urllib.parse.urlencode(params)
+        if PytwisConst.AUTH in session:
+            url = self.middleLayerBaseUrl + '?' + urllib.parse.urlencode(params) + \
+                  '&' + urllib.parse.urlencode({PytwisConst.AUTH : session[PytwisConst.AUTH]})
         else:
-            url = self.baseUrl + '?' + urllib.parse.urlencode(params) + \
-                  '&' + urllib.parse.urlencode({PytwisConst.AUTH : self.secreteKey})
+            url = self.middleLayerBaseUrl + '?' + urllib.parse.urlencode(params)
 
         response = requests.get(url)
 
@@ -78,14 +77,17 @@ class PytwisHandler(metaclass=Singleton):
             dicResponse = json.loads(response.text)
 
             if(PytwisConst.AUTH in dicResponse):
-                self.secreteKey = dicResponse[PytwisConst.AUTH] # Update auth secret key
+                session[PytwisConst.AUTH] = dicResponse[PytwisConst.AUTH] # Update auth secret key
 
             if (PytwisConst.USER_NAME in dicResponse):
-                self.userName = dicResponse[PytwisConst.USER_NAME] # update a user name
+                session[PytwisConst.USER_NAME] = dicResponse[PytwisConst.USER_NAME] # update a user name
 
             return response.status_code, dicResponse
         else:
             return response.status_code, ""
 
     def getUsername(self):
-        return self.userName
+        if PytwisConst.USER_NAME in session:
+            return session[PytwisConst.USER_NAME]
+        else:
+            return "Not logged in yet."
